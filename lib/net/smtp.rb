@@ -802,9 +802,9 @@ module Net
     end
 
   end   # class SMTP
-  saved_verbosity = $-v
-  $-v = nil
+
+  Net.instance_eval {remove_const :SMTPSession} if defined?(SMTPSession)
+  
   SMTPSession = SMTP
-  $-v = saved_verbosity
 
 end   # module Net
