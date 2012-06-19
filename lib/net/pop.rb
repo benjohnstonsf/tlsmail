@@ -195,7 +195,7 @@ module Net
   # String. Normally the unique-id is a hash of the message.
   # 
   class POP3 < Protocol
-
+    Net::POP.instance_eval {remove_const :Revision} if defined?(Net::POP::Revision)
     Revision = %q$Revision: 6285 $.split[1]
 
     #
@@ -683,6 +683,14 @@ module Net
 
   end   # class POP3
 
+  # class aliase
+  Net.instance_eval {remove_const :POP} if defined?(Net::POP)
+  Net.instance_eval {remove_const :POPSession} if defined?(Net::POPSession)
+  Net.instance_eval {remove_const :POP3Session} if defined?(Net::POP3Session)
+  POP = POP3
+  POPSession  = POP3
+  POP3Session = POP3
+
   #
   # This class is equivalent to POP3, except that it uses APOP authentication.
   #
@@ -694,13 +702,9 @@ module Net
   end
 
   # class aliases
-  saved_verbosity = $-v
-  $-v = nil
-  POP = POP3
-  POPSession  = POP3
-  POP3Session = POP3
+  Net.instance_eval {remove_const :APOPSession} if defined?(Net::APOPSession)
   APOPSession = APOP
-  $-v = saved_verbosity
+
 
   #
   # This class represents a message which exists on the POP server.
